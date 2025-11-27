@@ -1,0 +1,6 @@
+**Objectif** : Configurer AWS pour l'application
+**Définition du project**: Lis @workspace/definition/Prompt Summarize
+**Contexte**: Seuls le squelette de fichiers de l'application, les fichiers de configuration et l'initialisation Git ont été créés pour l'instant
+
+**Tâches** :
+Décrit de manière détaillée les opérations nécessaires pour configurer AWS et Amplify pour déployer et exécuter les deux environnements de cette application à partir de Git
