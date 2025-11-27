@@ -1,0 +1,9 @@
+Objectif : Créer des environnement Developement et Production
+Instructions générales: Lis @workspace/definition/Prompt Global
+Définition du project: Lis @workspace/definition/Prompt Summarize
+Contexte: Seul le squelette de fichiers de l'application a été créé pour l'instant
+
+Tâches :
+- Créer un environnement de développement avec les configurations nécessaires pour le développement local.
+- Créer un environnement de production avec les configurations optimisées pour la performance et la sécurité.
+- Assurer que les deux environnements sont isolés l'un de l'autre.

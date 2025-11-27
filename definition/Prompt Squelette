@@ -1,0 +1,17 @@
+Objectif : créer un squelette minimal du projet sans implémenter les fonctionnalités pour l'instant.
+Instructions générales: Lis @workspace/definition/Prompt Global
+Définition du project: Lis @workspace/definition/Prompt Summarize
+
+Tâche :
+- Propose la structure de dossiers/fichiers du projet (sous forme d’arborescence).
+- Indique pour chaque dossier son rôle.
+- Génère un contenu minimal pour afficher "Hello World"
+
+côté backend : point d’entrée (server.ts ou index.js…), configuration basique du serveur HTTP et d’une route /health
+côté frontend : point d’entrée (main.tsx, index.jsx…), composant racine, routing minimal si nécessaire
+Ajoute les fichiers de config indispensables pour la stack choisie (package.json, config TypeScript si besoin, linter/formatter si utile).
+
+Contraintes :
+- pas de logique métier, uniquement un squelette propre et prêt à démarrer
+- respecte les bonnes pratiques de la stack choisie
+- indique les commandes à lancer pour initialiser le projet et démarrer en local.
