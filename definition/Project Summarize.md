@@ -30,4 +30,4 @@ Deliverable and Article are managed in Humegacy and are out of the area of the T
 **Stack**
 developement stack: React, React Admin, Next.js, DynamoDB
 Infrastructure: AWS, Dynamodb, S3, Lambda, AppSync, Incognito
-CI/CD: Amplify
+CI/CD: Amplify Gen 2

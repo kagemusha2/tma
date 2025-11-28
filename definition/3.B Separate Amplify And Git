@@ -1,0 +1,183 @@
+1. À quoi sert vraiment amplify.yml ?
+
+Dans Amplify Hosting, amplify.yml sert à définir le pipeline de build & déploiement de ton front (et éventuellement du backend Amplify déjà défini), par exemple :
+
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm ci
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+
+
+Ce fichier décrit surtout :
+
+comment installer les dépendances,
+
+comment builder l’app,
+
+quel répertoire publier.
+
+La création des ressources (API, auth, storage…) est normalement gérée par :
+
+amplify init, amplify add <category>, amplify push,
+ou
+
+la console Amplify (pour les backend environments gérés par Amplify).
+
+Tu n’as donc généralement pas besoin d’y mettre des commandes comme aws cloudformation deploy ou terraform apply, sauf cas très particulier où tu veux orchestrer autre chose que l’écosystème Amplify.
+
+2. Si je veux quand même créer des ressources dans amplify.yml ?
+
+C’est possible mais à manier avec précaution.
+Tu peux ajouter des commandes dans les phases preBuild ou build. Exemple simplifié :
+
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm ci
+            - ./scripts/create-resources.sh
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+
+
+Et dans scripts/create-resources.sh, tu appelles par exemple aws cloudformation deploy ou cdk deploy, etc.
+
+Problème :
+
+Chaque build peut tenter de redéployer les ressources (risque d’erreurs/idempotence).
+
+Tu dois gérer toi-même les droits IAM, collisions entre envs, rollback, etc.
+
+Dans l’écosystème Amplify, c’est rarement la bonne approche. La manière standard est :
+
+un backend Amplify (via amplify/backend),
+
+plusieurs environnements (dev, test, prod) via amplify env add, amplify env checkout,
+
+puis Amplify Hosting qui déploie en se basant sur un env donné.
+
+3. Prendre en compte l’environnement de déploiement
+
+Si tu as quand même besoin que des commandes dans amplify.yml tiennent compte de l’environnement, tu t’appuies sur les variables d’environnement qu’Amplify met à disposition.
+
+Les plus utiles :
+
+AWS_BRANCH : nom de la branche Git (souvent utilisée pour déduire dev, staging, prod).
+
+AWS_REGION : région AWS de build.
+
+Tes propres variables d’env définies dans Amplify console (par environnement / branche).
+
+Tu peux par exemple faire :
+
+version: 1
+applications:
+  - frontend:
+      env:
+        STAGE: $AWS_BRANCH
+      phases:
+        preBuild:
+          commands:
+            - echo "Stage: $STAGE"
+            - ./scripts/create-resources.sh $STAGE
+        build:
+          commands:
+            - npm run build -- --mode $STAGE
+      artifacts:
+        baseDirectory: dist
+        files:
+          - '**/*'
+
+
+Et dans create-resources.sh :
+
+#!/usr/bin/env bash
+set -e
+
+STAGE="$1"
+
+if [ "$STAGE" = "main" ]; then
+  ENV="prod"
+elif [ "$STAGE" = "develop" ]; then
+  ENV="dev"
+else
+  ENV="$STAGE"
+fi
+
+echo "Deploying infra for env: $ENV"
+
+aws cloudformation deploy \
+  --stack-name myapp-$ENV \
+  --template-file infra/template-$ENV.yaml \
+  --parameter-overrides Environment=$ENV
+
+
+Autre possibilité : ne pas faire la logique de mapping dans le script, mais utiliser des variables d’env configurées par branche dans la console Amplify (par exemple APP_ENV=dev/test/prod), puis :
+
+env:
+  APP_ENV: $APP_ENV
+
+
+et tu consommes APP_ENV dans tes scripts.
+
+4. Pratique recommandée dans Amplify
+
+En pratique, la voie la plus fiable est :
+
+Gérer l’infra applicative avec Amplify lui-même :
+
+amplify add api, amplify add auth, etc.
+
+amplify push pour créer les ressources par env.
+
+Création/synchronisation des environnements :
+
+amplify env add dev
+
+amplify env add prod
+
+amplify env checkout dev etc.
+
+Config Amplify Hosting :
+
+chaque branche Git est liée à un env Amplify (dev → env dev, main → env prod),
+
+le amplify.yml ne sert qu’au build du front.
+
+Tu n’écris pas toi-même les commandes de création des ressources dans amplify.yml; Amplify les déploie via ses propres CloudFormation stacks lorsque tu gères tes envs.
+
+5. Résumé opérationnel
+
+Tu n’es pas obligé d’ajouter les commandes de création de ressources dans amplify.yml et, avec Amplify, c’est plutôt déconseillé.
+
+Si tu utilises le backend Amplify, tu laisses Amplify gérer les ressources; ton amplify.yml contient uniquement les commandes de build.
+
+Si tu as de l’infra externe (CloudFormation/CDK/Terraform) et que tu veux absolument la lancer dans le pipeline Amplify, tu peux ajouter des scripts dans preBuild/build et les paramétrer via $AWS_BRANCH et des variables d’environnement configurées dans la console.
+
+Pour gérer les environnements (dev, test, prod), base-toi sur :
+
+les envs Amplify (amplify env),
+
+les branch mappings dans Amplify Hosting,
+
+les variables d’environnement par branche/env.

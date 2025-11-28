@@ -1,0 +1,55 @@
+2025-11-28T07:09:16.022Z [INFO]: # Build environment configured with Standard build compute type: 8GiB Memory, 4vCPUs, 128GB Disk Space
+2025-11-28T07:09:16.631Z [INFO]: # Cloning repository: git@github.com:kagemusha2/tma.git
+2025-11-28T07:09:17.395Z [INFO]: 
+2025-11-28T07:09:17.396Z [INFO]: Cloning into 'tma'...
+2025-11-28T07:09:17.396Z [INFO]: # Checking for Git submodules at: /codebuild/output/src3453131320/src/tma/.gitmodules
+2025-11-28T07:09:17.406Z [INFO]: # Retrieving environment cache...
+2025-11-28T07:09:17.437Z [WARNING]: ! Unable to write cache: {"code":"ERR_BAD_REQUEST","message":"Request failed with status code 404"})}
+2025-11-28T07:09:17.437Z [INFO]: ---- Setting Up SSM Secrets ----
+2025-11-28T07:09:17.438Z [INFO]: SSM params {"Path":"/amplify/d2nmiulwzohoge/main/","WithDecryption":true}
+2025-11-28T07:09:17.486Z [WARNING]: !Failed to set up process.env.secrets
+2025-11-28T07:09:18.291Z [INFO]: # No package override configuration found.
+2025-11-28T07:09:18.295Z [INFO]: # Retrieving cache...
+2025-11-28T07:09:18.345Z [INFO]: # Retrieved cache
+2025-11-28T07:09:23.145Z [INFO]: ## Starting Backend Build
+                                 ## Checking for associated backend environment...
+                                 ## No backend environment association found, continuing...
+                                 ## Completed Backend Build
+2025-11-28T07:09:23.150Z [INFO]: {"backendDuration": 0}
+                                 ## Starting Frontend Build
+                                 # Starting phase: preBuild
+                                 # Executing command: npm ci
+2025-11-28T07:09:38.645Z [WARNING]: npm error code EUSAGE
+2025-11-28T07:09:38.651Z [WARNING]: npm error
+                                    npm error `npm ci` can only install packages when your package.json and package-lock.json or npm-shrinkwrap.json are in sync. Please update your lock file with `npm install` before continuing.
+                                    npm error
+                                    npm error Invalid: lock file's picomatch@2.3.1 does not satisfy picomatch@4.0.3
+                                    npm error Missing: picomatch@2.3.1 from lock file
+                                    npm error Invalid: lock file's react-is@16.13.1 does not satisfy react-is@19.2.0
+                                    npm error Missing: react-is@16.13.1 from lock file
+                                    npm error Missing: react-is@16.13.1 from lock file
+                                    npm error
+                                    npm error Clean install a project
+                                    npm error
+                                    npm error Usage:
+                                    npm error npm ci
+                                    npm error
+                                    npm error Options:
+                                    npm error [--install-strategy <hoisted|nested|shallow|linked>] [--legacy-bundling]
+                                    npm error [--global-style] [--omit <dev|optional|peer> [--omit <dev|optional|peer> ...]]
+                                    npm error [--include <prod|dev|optional|peer> [--include <prod|dev|optional|peer> ...]]
+                                    npm error [--strict-peer-deps] [--foreground-scripts] [--ignore-scripts] [--no-audit]
+                                    npm error [--no-bin-links] [--no-fund] [--dry-run]
+                                    npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+                                    npm error [-ws|--workspaces] [--include-workspace-root] [--install-links]
+                                    npm error
+                                    npm error aliases: clean-install, ic, install-clean, isntall-clean
+                                    npm error
+                                    npm error Run "npm help ci" for more info
+                                    npm error A complete log of this run can be found in: /root/.npm/_logs/2025-11-28T07_09_26_605Z-debug-0.log
+2025-11-28T07:09:38.738Z [ERROR]: !!! Build failed
+2025-11-28T07:09:38.738Z [INFO]: Please read more about Amplify Hosting's support for SSR frameworks to find if your build failure is related to an unsupported feature: https://docs.aws.amazon.com/amplify/latest/userguide/amplify-ssr-framework-support.html. You may also find this troubleshooting guide useful: https://docs.aws.amazon.com/amplify/latest/userguide/troubleshooting-ssr-deployment.html
+2025-11-28T07:09:38.738Z [ERROR]: !!! Error: Command failed with exit code 1
+2025-11-28T07:09:38.738Z [INFO]: # Starting environment caching...
+2025-11-28T07:09:38.739Z [INFO]: # Environment caching completed
+

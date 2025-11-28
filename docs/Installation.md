@@ -12,6 +12,7 @@ Créer un nouveau profile aws avec ***aws configure --profile [NOM DU PROFILE]**
 Modifier les scripts aws_ dans le répertoire tools pour ajouter le [NOM DU PROFILE]
 
 **Configurer AWS Amplify**
+***Correction de BUG => modifier le fichier amplify.yml de sorte à ce qu'il y a ait la commande npm install en prebuild sinon le build fails dans AMplify***
 Lancer ***npm install -g @aws-amplify/cli***
 Lancer ***amplify configure***
 Entrer les mêmes clefs que pour AWS
@@ -34,48 +35,28 @@ Voici la procédure complète pour utiliser AWS Amplify avec un sous-domaine don
 Amplify propose automatiquement Route 53, mais tu peux ignorer cette étape.
 Tu vas gérer le certificat dans AWS et les DNS chez DNSMadeEasy.
 2. Générer le certificat pour le sous-domaine dans AWS Certificate Manager (ACM)
-- Aller dans ACM (région : même région que ton app Amplify).
+- Aller dans ACM, dans la région d'Amplify ==> !! Que us-east-1 disponible pour AMplify !!
 - Demander un certificat pour ton sous-domaine, par ex. app.mondomaine.com
 - Choisir DNS validation.
 - ACM t’affiche un enregistrement CNAME de validation qu'il faudra ajouter en CNAME dans le DNS
 (ex: _2e0d204db63a90b77544216357d080af.tma.humanodev.com.  =  _da799f8fd1fd6a9c6df8920d5479176e.jkddzztszm.acm-validations.aws.)
 
 
+**Configurer domaine Amplify**
+Aller dans Hosting / Custom Domains sur Amplify
+Choisir Add Domain, Custom Domain, saisir le domain, l'affecter à la branche, affecter le certificat
+Ajouter les CNAME dans DNSMadeEasy
 
-4. Configurer Amplify pour utiliser ton domaine
-Dans l’interface Amplify :
-Aller dans Domain management.
+**Configurer les variables d'environnement**
+Les variables sont déclarés dans les fichiers .env du projet (prod et dev)
+Elles peuvent ensuite être réécrites au moment du déploiement avec celles déclarées dans Amplify dans Hosting / Environnment variables avec un override possible par branche
+Les variables de dev doivent exister aux 2 endroits pour permettre l'exe en local comme dans Amplify
 
-Choisir Add domain puis cliquer sur “Use custom domain” (même si non géré par Route 53).
-
-Amplify va générer une URL cible de type :
-
-xxx.amplifyapp.com
-
-
-Amplify va te donner l’enregistrement CNAME à placer chez DNSMadeEasy :
-
-app.mondomaine.com -> xxx.amplifyapp.com
-
-
-Tu ne dois ajouter que ce CNAME dans DNSMadeEasy.
-
-5. Ajouter le CNAME de pointage final dans DNSMadeEasy
-
-Dans DNSMadeEasy, ajouter :
-
-Nom : app
-
-Type : CNAME
-
-Valeur : xxx.amplifyapp.com
-
-6. Résultat attendu
-
-DNSMadeEasy reste ton DNS principal.
-
-Le certificat est géré par AWS ACM (plus simple car intégré à Amplify).
-
-Le sous-domaine app.mondomaine.com pointe vers ton app Amplify.
-
-HTTPS fonctionne automatiquement grâce au certificat ACM relié à Amplify.
+**Changement de version Amplify**
+Claude IA a installé amplify V1. 
+Cette version en cours d'obsolescence a du être remplacée par la V2 ce qui a nécessité beaucoup de manipulations.
+La V2 permet notamment de coder l'infrastructure dans le dossier amplify (authentication, database, stockage) et laisser Amplify créer ces ressources sur AWS automatiquement.
+L'installation de la V1 se fait par amplify init et celle de la V2 par npm create amplify@latest.
+Pour le changement, il a fallu :
+- mettre le rôle administor (policy AdministratorAmplify) à l'app Amplify
+- modifier amplify.yaml pour qu'il ajouter des commandes de build backend (il a fallu aussi remplacer npm ci par npm install - voire bug en V1)
