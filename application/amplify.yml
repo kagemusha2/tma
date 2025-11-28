@@ -5,15 +5,15 @@ applications:
     phases:
       build:
         commands:
-          - npm ci
-          #- npm install --cache .npm --prefer-offline
+          #- npm ci
+          - npm install --cache .npm --prefer-offline
           - chmod +x scripts/deploy-backend.sh && ./scripts/deploy-backend.sh
   frontend:
     phases:
       preBuild:
         commands:
-          - npm ci
-          #- npm install --cache .npm --prefer-offline
+          #- npm ci
+          - npm install --cache .npm --prefer-offline
           - chmod +x scripts/generate-outputs.sh && ./scripts/generate-outputs.sh
       build:
         commands:
