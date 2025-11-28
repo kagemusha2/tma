@@ -6,7 +6,7 @@ applications:
       build:
         commands:
           #- npm ci
-          - npm install --cache .npm --prefer-offline
+          #- npm install --cache .npm --prefer-offline
           - chmod +x scripts/deploy-backend.sh && ./scripts/deploy-backend.sh
   frontend:
     phases:
