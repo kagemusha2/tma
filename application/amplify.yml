@@ -6,13 +6,7 @@ applications:
       build:
         commands:
           # npm install une seule fois ici, réutilisé par le frontend
-          #- npm install --cache .npm --prefer-offline
-          - npm --version
-          - node -v
-          - pwd
-          - ls -a
-          - cat package-lock.json | head -n 5
-          - npm ci               
+          #- npm install --cache .npm --prefer-offline       
           - npm ci --cache .npm --prefer-offline
           - chmod +x scripts/deploy-backend.sh && ./scripts/deploy-backend.sh
   frontend:
