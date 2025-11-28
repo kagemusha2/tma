@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Récupérer les variables d'environnement Amplify
+# Récupérer les variables d'environnement Amplify ..
 BRANCH="${AWS_BRANCH:-main}"
 APP_ID="${AWS_APP_ID:-d2nmiulwzohoge}"
 
