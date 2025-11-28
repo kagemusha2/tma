@@ -1,16 +1,18 @@
 version: 1
 applications:
 - appRoot: tma
+  backend:
+    phases:
+      build:
+        commands:
+          - npm ci
+          - chmod +x scripts/deploy-backend.sh && ./scripts/deploy-backend.sh
   frontend:
-    env:
-      STAGE: $AWS_BRANCH  
-      APPID: $AWS_APP_ID
     phases:
       preBuild:
         commands:
-          #- npm ci
-          - npm install --cache .npm --prefer-offline
-          #- npx ampx generate outputs --branch $STAGE --app-id $APPID
+          - npm ci
+          - chmod +x scripts/generate-outputs.sh && ./scripts/generate-outputs.sh
       build:
         commands:
           - npm run build
