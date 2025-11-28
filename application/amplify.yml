@@ -1,6 +1,6 @@
 version: 1
 applications:
-- appRoot: tma
+- appRoot: application
   backend:
     phases:
       build:
@@ -13,7 +13,7 @@ applications:
       preBuild:
         commands:
           #- npm ci
-          - npm install --cache .npm --prefer-offline
+          #- npm install --cache .npm --prefer-offline
           - chmod +x scripts/generate-outputs.sh && ./scripts/generate-outputs.sh
       build:
         commands:
