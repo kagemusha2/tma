@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:todo": "tsx scripts/seed-todo.ts"
   },
   "dependencies": {
     "aws-amplify": "^6.15.8",
